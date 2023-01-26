@@ -56,7 +56,32 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin123
       - GF_USERS_ALLOW_SIGN_UP=false
     restart: unless-stopped
+    expose:
+      - 3000
     ports:
       - 3000:3000/tcp
     networks:
       - monitoring
+    labels:
+      - "traefik.http.routers.grafana.rule=(Host(`192.168.0.4`))"
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    command: --api.insecure=true --providers.docker
+    ports:
+      - 8080:8080/tcp
+      - 80:80/tcp
+    networks:
+      - monitoring
+
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    networks:
+    - monitoring
+    labels:
+      - "traefik.http.routers.whoami.rule=(Host(`192.168.0.4`) && PathPrefix(`/whoami`))"
