@@ -8,19 +8,6 @@ volumes:
     driver: local
 
 services:
-  cloudflare-ddns:
-    image: timothyjmiller/cloudflare-ddns:latest
-    container_name: cloudflare-ddns
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - ./cloudflare-ddns/config.json:/config.json
-    network_mode: host
-
   traefik:
     image: traefik:latest
     container_name: traefik
