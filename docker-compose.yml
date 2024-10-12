@@ -8,6 +8,15 @@ volumes:
     driver: local
 
 services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=eyJhIjoiNzFiZTBiNmYzZjZmOGRmYTk3M2FhOGU2YjdmMGEwYTYiLCJ0IjoiOTJlNTU5OWItMzgyNy00ZTBiLTk4NDItZGQ1YTFjZWExYTg4IiwicyI6Ik9EVmhNVFE1T1RjdE5ERTNPQzAwTVRnNUxXRm1ZMkl0WkRReE5ERTFNRFpqWkRZMiJ9
+    network_mode: host
+
   traefik:
     image: traefik:latest
     container_name: traefik
@@ -37,8 +46,6 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
       - grafana-storage:/var/lib/grafana
-    ports:
-      - 3000:3000
     networks:
       - monitoring
     labels:
