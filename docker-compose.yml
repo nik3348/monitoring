@@ -1,6 +1,7 @@
 networks:
   monitoring:
-    driver: bridge
+  traefik_network:
+    external: true
 
 volumes:
   grafana-storage: {}
@@ -14,7 +15,7 @@ services:
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      - TUNNEL_TOKEN=eyJhIjoiNzFiZTBiNmYzZjZmOGRmYTk3M2FhOGU2YjdmMGEwYTYiLCJ0IjoiOTJlNTU5OWItMzgyNy00ZTBiLTk4NDItZGQ1YTFjZWExYTg4IiwicyI6Ik9EVmhNVFE1T1RjdE5ERTNPQzAwTVRnNUxXRm1ZMkl0WkRReE5ERTFNRFpqWkRZMiJ9
+      - TUNNEL_TOKEN=
     network_mode: host
 
   traefik:
@@ -28,6 +29,7 @@ services:
       - 80:80
       - 8080:8080
     networks:
+      - traefik_network
       - monitoring
 
   whoami:
